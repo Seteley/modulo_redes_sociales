@@ -5,21 +5,35 @@ app_description = "Módulo para hacer consultas a un modelo de ML relacionado al
 app_email = "tejedasergio2004@gmail.com"
 app_license = "mit"
 
+app_include_css = "/assets/modulo_redes_sociales/css/modulo_redes_sociales.css"
+app_include_js = "/assets/modulo_redes_sociales/js/modulo_redes_sociales.js"
+
+# Agregar esta línea
+app_logo_url = "/assets/modulo_redes_sociales/images/logo.png"
+
+# Esto muestra el módulo en el escritorio
+app_include_js = "/assets/modulo_redes_sociales/js/modulo_redes_sociales.js"
+
+# Agrega tu página
+website_route_rules = [
+    {"from_route": "/", "to_route": "modulo_redes_sociales"}
+]
+
 # Apps
 # ------------------
 
 # required_apps = []
 
 # Each item in the list will be shown as an app in the apps page
-# add_to_apps_screen = [
-# 	{
-# 		"name": "modulo_redes_sociales",
-# 		"logo": "/assets/modulo_redes_sociales/logo.png",
-# 		"title": "Modulo Redes Sociales",
-# 		"route": "/modulo_redes_sociales",
-# 		"has_permission": "modulo_redes_sociales.api.permission.has_app_permission"
-# 	}
-# ]
+add_to_apps_screen = [
+    {
+        "name": "modulo_redes_sociales",
+        "logo": "/assets/modulo_redes_sociales/logo.png",
+        "title": "Modulo Redes Sociales",
+        "route": "/modulo_redes_sociales"
+        # "has_permission": "modulo_redes_sociales.api.permission.has_app_permission"  # Descomenta si tienes esta función
+    }
+]
 
 # Includes in <head>
 # ------------------
