@@ -163,8 +163,13 @@ class APIConfiguration(Document):
                 else:
                     frappe.throw(f"Método HTTP no soportado: {method}")
                 
-                # Log de respuesta para debug
-                frappe.log_error(f"API Response: {response.status_code} - {response.text[:200]}", "Social Media API Debug")
+                # Log de respuesta para debug - limitado para evitar truncamiento
+                if response.status_code in [200, 201, 204]:
+                    frappe.log_error(f"API Response: {response.status_code} - Success", "Social Media API Debug")
+                else:
+                    # Solo mostrar primeros 100 caracteres del error
+                    error_text = response.text[:100] + "..." if len(response.text) > 100 else response.text
+                    frappe.log_error(f"API Response: {response.status_code} - {error_text}", "Social Media API Debug")
                 
                 # Si la respuesta es exitosa, devolverla
                 if response.status_code in [200, 201, 204]:
@@ -182,11 +187,14 @@ class APIConfiguration(Document):
                 
                 # Para otros errores, lanzar excepción
                 else:
-                    frappe.throw(f"Error de API: {response.status_code} - {response.text}")
+                    # Limitar longitud del mensaje de error
+                    error_text = response.text[:100] + "..." if len(response.text) > 100 else response.text
+                    frappe.throw(f"Error de API: {response.status_code} - {error_text}")
                     
             except requests.exceptions.Timeout:
                 if attempt < max_retries:
-                    frappe.log_error(f"Timeout en intento {attempt + 1}, reintentando en {retry_delay}s")
+                    # Log simple sin detalles excesivos
+                    frappe.log_error(f"Timeout en intento {attempt + 1}, reintentando en {retry_delay}s", "API Timeout")
                     import time
                     time.sleep(retry_delay)
                     continue
@@ -195,7 +203,8 @@ class APIConfiguration(Document):
                     
             except requests.exceptions.ConnectionError:
                 if attempt < max_retries:
-                    frappe.log_error(f"Error de conexión en intento {attempt + 1}, reintentando en {retry_delay}s")
+                    # Log simple sin detalles excesivos
+                    frappe.log_error(f"Error de conexión en intento {attempt + 1}, reintentando en {retry_delay}s", "API Connection")
                     import time
                     time.sleep(retry_delay)
                     continue
@@ -203,8 +212,12 @@ class APIConfiguration(Document):
                     frappe.throw("Error de conexión en todos los intentos")
                     
             except Exception as e:
-                frappe.log_error(f"Error inesperado: {str(e)}")
-                frappe.throw(f"Error inesperado: {str(e)}")
+                # Limitar longitud del mensaje de error
+                error_msg = str(e)
+                if len(error_msg) > 100:
+                    error_msg = error_msg[:100] + "... (truncado)"
+                # Log sin usar frappe.log_error para evitar bucles
+                frappe.throw(f"Error inesperado: {error_msg}")
 
     @frappe.whitelist()
     def test_connection_btn(self) -> None:

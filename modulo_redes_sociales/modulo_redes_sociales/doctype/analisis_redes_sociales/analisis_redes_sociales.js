@@ -106,14 +106,23 @@ function actualizar_visibilidad_campos(frm) {
         frm.toggle_display('fecha_analisis', tipo === 'Predicción de Seguidores');
     }
     
-    // Campos específicos de Clustering
+    // Campos específicos de Clustering - AHORA SIEMPRE OCULTOS
+    // El clustering ya no requiere estos parámetros, usa modelo pkl guardado
     const campos_clustering = [
         'clustering_section', 'likes', 'comentarios', 'compartidos',
-        'cluster_resultado', 'cluster_asignado', 'cluster_nombre'
+        'cluster_resultado'
     ];
     
-    // Mostrar/ocultar campos de clustering
+    // Ocultar SIEMPRE los campos de clustering (ya no se usan)
     campos_clustering.forEach(campo => {
+        if (frm.fields_dict[campo]) {
+            frm.toggle_display(campo, false); // Siempre ocultos
+        }
+    });
+    
+    // Campos de resultado de clustering (estos SÍ se muestran para mostrar resultados)
+    const campos_resultado_clustering = ['cluster_asignado', 'cluster_nombre'];
+    campos_resultado_clustering.forEach(campo => {
         if (frm.fields_dict[campo]) {
             frm.toggle_display(campo, tipo === 'Clustering');
         }
@@ -138,11 +147,10 @@ function limpiar_campos_no_aplicables(frm) {
         frm.set_value('fecha_analisis', '');
     }
     
-    if (tipo !== 'Clustering') {
-        frm.set_value('likes', '');
-        frm.set_value('comentarios', '');
-        frm.set_value('compartidos', '');
-    }
+    // Limpiar campos de clustering SIEMPRE (ya no se usan)
+    frm.set_value('likes', '');
+    frm.set_value('comentarios', '');
+    frm.set_value('compartidos', '');
     
     if (tipo !== 'Entrenamiento de Modelo' && tipo !== 'Métricas de Modelo') {
         frm.set_value('metricas_modelo', '');

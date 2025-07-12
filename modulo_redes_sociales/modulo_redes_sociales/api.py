@@ -230,8 +230,9 @@ def ejecutar_analisis(analisis_id: str) -> Dict[str, Any]:
                 return {"success": False, "error": "Fecha de análisis requerida para predicción de seguidores"}
         
         elif doc.tipo_analisis == "Clustering":
-            if not all([doc.likes, doc.comentarios, doc.compartidos]):
-                return {"success": False, "error": "Likes, comentarios y compartidos requeridos para clustering"}
+            # El clustering ahora solo requiere usuario y configuración API
+            # No necesita parámetros adicionales ya que usa el modelo pkl guardado
+            pass
         
         # Cambiar estado a ejecutando
         doc.estado = "Ejecutando"
@@ -336,9 +337,9 @@ def ejecutar_analisis_directo(analisis_id: str) -> Dict[str, Any]:
         result = None
         
         if doc.tipo_analisis == "Predicción de Seguidores":
-            result = doc._ejecutar_prediccion(config_doc)
+            result = doc._ejecutar_prediccion_dev()
         elif doc.tipo_analisis == "Clustering":
-            result = doc._ejecutar_clustering(config_doc)
+            result = doc._ejecutar_clustering_dev()
         elif doc.tipo_analisis == "Entrenamiento de Modelo":
             result = doc._ejecutar_entrenamiento(config_doc)
         elif doc.tipo_analisis == "Métricas de Modelo":
@@ -347,10 +348,8 @@ def ejecutar_analisis_directo(analisis_id: str) -> Dict[str, Any]:
         api_duration = (datetime.now() - api_start).total_seconds()
         doc.log_ejecucion += f"\n[{datetime.now().strftime('%H:%M:%S.%f')[:-3]}] API completada en {api_duration:.2f}s"
         
-        # Procesar resultados
-        if result:
-            doc._procesar_resultados(result)
-            doc.estado = "Completado"
+        # Los métodos _dev ya procesan sus propios resultados
+        if result and result.get("success"):
             total_duration = (datetime.now() - start_time).total_seconds()
             doc.log_ejecucion += f"\n[{datetime.now().strftime('%H:%M:%S.%f')[:-3]}] ✅ Completado en {total_duration:.2f}s total"
             doc.save()
@@ -360,10 +359,10 @@ def ejecutar_analisis_directo(analisis_id: str) -> Dict[str, Any]:
                 "success": True,
                 "message": f"Análisis completado en {total_duration:.2f} segundos",
                 "duration": total_duration,
-                "result": result
+                "result": result.get("result", {})
             }
         else:
-            raise Exception("API no devolvió resultados")
+            raise Exception("API no devolvió resultados válidos")
             
     except Exception as e:
         error_duration = (datetime.now() - start_time).total_seconds()
@@ -378,3 +377,45 @@ def ejecutar_analisis_directo(analisis_id: str) -> Dict[str, Any]:
             "message": str(e),
             "duration": error_duration
         }
+
+
+@frappe.whitelist()
+def descargar_clustering_completo(docname: str) -> Dict[str, Any]:
+    """Download complete clustering results for an analysis"""
+    try:
+        doc = frappe.get_doc("Analisis Redes Sociales", docname)
+        
+        if doc.tipo_analisis != "Clustering":
+            frappe.throw("Este análisis no es de tipo Clustering")
+        
+        return doc.descargar_resultados_completos()
+        
+    except Exception as e:
+        frappe.throw(f"Error al preparar descarga: {str(e)}")
+
+
+@frappe.whitelist()
+def get_clustering_summary(docname: str) -> Dict[str, Any]:
+    """Get clustering summary for display"""
+    try:
+        doc = frappe.get_doc("Analisis Redes Sociales", docname)
+        
+        if not doc.resumen_clusters:
+            return {"error": "No hay resumen de clusters disponible"}
+        
+        summary = json.loads(doc.resumen_clusters)
+        
+        # Add additional formatting for display
+        summary["formatted_engagement"] = f"{summary.get('avg_engagement_rate', 0):.2%}"
+        summary["formatted_likes"] = f"{summary.get('total_likes', 0):,}"
+        summary["formatted_views"] = f"{summary.get('total_views', 0):,}"
+        
+        return {
+            "success": True,
+            "summary": summary,
+            "estado": doc.estado,
+            "fecha_analisis": str(doc.fecha_analisis) if doc.fecha_analisis else None
+        }
+        
+    except Exception as e:
+        return {"error": str(e)}

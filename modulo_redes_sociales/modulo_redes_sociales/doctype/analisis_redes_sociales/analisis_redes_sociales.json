@@ -28,6 +28,7 @@
   "column_break_20",
   "cluster_asignado",
   "cluster_nombre",
+  "resumen_clustering_display",
   "logs_section",
   "log_ejecucion",
   "error_message"
@@ -95,8 +96,7 @@
    "depends_on": "eval:doc.tipo_analisis == 'Predicción de Seguidores'",
    "fieldname": "fecha_analisis",
    "fieldtype": "Date",
-   "label": "Fecha de Análisis",
-   "reqd": 1
+   "label": "Fecha de Análisis"
   },
   {
    "depends_on": "eval:false",
@@ -159,36 +159,36 @@
    "read_only": 1
   },
   {
-   "depends_on": "eval:doc.tipo_analisis == 'Clustering'",
+   "depends_on": "eval:false",
    "fieldname": "clustering_section",
    "fieldtype": "Section Break",
    "label": "Parámetros de Clustering"
   },
   {
-   "depends_on": "eval:doc.tipo_analisis == 'Clustering'",
+   "depends_on": "eval:false",
    "fieldname": "likes",
    "fieldtype": "Int",
    "label": "Número de Likes"
   },
   {
-   "depends_on": "eval:doc.tipo_analisis == 'Clustering'",
+   "depends_on": "eval:false",
    "fieldname": "comentarios",
    "fieldtype": "Int",
    "label": "Número de Comentarios"
   },
   {
-   "depends_on": "eval:doc.tipo_analisis == 'Clustering'",
+   "depends_on": "eval:false",
    "fieldname": "column_break_16",
    "fieldtype": "Column Break"
   },
   {
-   "depends_on": "eval:doc.tipo_analisis == 'Clustering'",
+   "depends_on": "eval:false",
    "fieldname": "compartidos",
    "fieldtype": "Int",
    "label": "Número de Compartidos"
   },
   {
-   "depends_on": "eval:doc.tipo_analisis == 'Clustering'",
+   "depends_on": "eval:false",
    "fieldname": "cluster_resultado",
    "fieldtype": "Int",
    "label": "Cluster Resultado",
@@ -229,6 +229,13 @@
    "fieldname": "cluster_nombre",
    "fieldtype": "Data",
    "label": "Nombre del Cluster",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.tipo_analisis == 'Clustering'",
+   "fieldname": "resumen_clustering_display",
+   "fieldtype": "Long Text",
+   "label": "Resumen de Clustering",
    "read_only": 1
   },
   {
