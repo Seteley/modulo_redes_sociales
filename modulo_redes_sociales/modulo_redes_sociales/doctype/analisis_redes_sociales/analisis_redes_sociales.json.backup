@@ -14,8 +14,16 @@
   "fecha_creacion",
   "parametros_section",
   "usuario_red_social",
-  "api_configuration",
-  "fecha_analisis",
+  "empresa_id",
+  "column_break_8",
+  "fecha_inicio",
+  "fecha_fin",
+  "prediccion_section",
+  "dias_prediccion",
+  "fecha_prediccion",
+  "column_break_12",
+  "modelo_usado",
+  "confianza",
   "clustering_section",
   "likes",
   "comentarios",
@@ -85,74 +93,54 @@
    "reqd": 1
   },
   {
-   "fieldname": "api_configuration",
-   "fieldtype": "Link",
-   "label": "Configuración de API",
-   "options": "API Configuration",
-   "reqd": 1
-  },
-  {
-   "depends_on": "eval:doc.tipo_analisis == 'Predicción de Seguidores'",
-   "fieldname": "fecha_analisis",
-   "fieldtype": "Date",
-   "label": "Fecha de Análisis",
-   "reqd": 1
-  },
-  {
-   "depends_on": "eval:false",
    "fieldname": "empresa_id",
    "fieldtype": "Int",
    "label": "ID de Empresa"
   },
   {
-   "depends_on": "eval:false",
    "fieldname": "column_break_8",
    "fieldtype": "Column Break"
   },
   {
-   "depends_on": "eval:false",
    "fieldname": "fecha_inicio",
    "fieldtype": "Date",
    "label": "Fecha de Inicio"
   },
   {
-   "depends_on": "eval:false",
    "fieldname": "fecha_fin",
    "fieldtype": "Date",
    "label": "Fecha de Fin"
   },
   {
-   "depends_on": "eval:false",
+   "depends_on": "eval:doc.tipo_analisis == 'Predicción de Seguidores'",
    "fieldname": "prediccion_section",
    "fieldtype": "Section Break",
    "label": "Parámetros de Predicción"
   },
   {
-   "depends_on": "eval:false",
+   "default": "30",
+   "depends_on": "eval:doc.tipo_analisis == 'Predicción de Seguidores'",
    "fieldname": "dias_prediccion",
    "fieldtype": "Int",
    "label": "Días para Predicción"
   },
   {
-   "depends_on": "eval:false",
+   "depends_on": "eval:doc.tipo_analisis == 'Predicción de Seguidores'",
    "fieldname": "fecha_prediccion",
    "fieldtype": "Date",
    "label": "Fecha de Predicción"
   },
   {
-   "depends_on": "eval:false",
    "fieldname": "column_break_12",
    "fieldtype": "Column Break"
   },
   {
-   "depends_on": "eval:false",
    "fieldname": "modelo_usado",
    "fieldtype": "Data",
    "label": "Modelo Usado",
    "read_only": 1
   },
   {
-   "depends_on": "eval:false",
    "fieldname": "confianza",
    "fieldtype": "Float",
    "label": "Nivel de Confianza",
@@ -177,7 +165,6 @@
    "label": "Número de Comentarios"
   },
   {
-   "depends_on": "eval:doc.tipo_analisis == 'Clustering'",
    "fieldname": "column_break_16",
    "fieldtype": "Column Break"
   },
@@ -188,7 +175,6 @@
    "label": "Número de Compartidos"
   },
   {
-   "depends_on": "eval:doc.tipo_analisis == 'Clustering'",
    "fieldname": "cluster_resultado",
    "fieldtype": "Int",
    "label": "Cluster Resultado",
@@ -200,14 +186,12 @@
    "label": "Resultados del Análisis"
   },
   {
-   "depends_on": "eval:doc.tipo_analisis == 'Predicción de Seguidores'",
    "fieldname": "prediccion_seguidores",
    "fieldtype": "Int",
    "label": "Predicción de Seguidores",
    "read_only": 1
   },
   {
-   "depends_on": "eval:doc.tipo_analisis == 'Entrenamiento de Modelo' || doc.tipo_analisis == 'Métricas de Modelo'",
    "fieldname": "metricas_modelo",
    "fieldtype": "Long Text",
    "label": "Métricas del Modelo",
@@ -218,14 +202,12 @@
    "fieldtype": "Column Break"
   },
   {
-   "depends_on": "eval:doc.tipo_analisis == 'Clustering'",
    "fieldname": "cluster_asignado",
    "fieldtype": "Int",
    "label": "Cluster Asignado",
    "read_only": 1
   },
   {
-   "depends_on": "eval:doc.tipo_analisis == 'Clustering'",
    "fieldname": "cluster_nombre",
    "fieldtype": "Data",
    "label": "Nombre del Cluster",

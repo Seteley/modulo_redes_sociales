@@ -1,53 +1,41 @@
-# Copyright (c) 2024, Tu Empresa and contributors
-# For license information, please see license.txt
-
 import frappe
 from frappe import _
 
-
 def get_data():
-    """Configuración para el workspace del módulo"""
+    """Configuración del módulo Social Media Analytics"""
     return {
-        "heatmap": True,
-        "heatmap_message": _("Este es el módulo de Social Media Analytics para ERPNext."),
-        "disable_heatmap": False,
-        "charts": [
-            {
-                "label": _("Análisis por Mes"),
-                "chart_name": _("Análisis por Mes"),
-                "chart_type": "Count",
-                "document_type": "Analisis Redes Sociales",
-                "based_on": "fecha_creacion",
-                "timespan": "Last Year",
-                "time_interval": "Monthly",
-                "filters_config": {
-                    "estado": "Completado"
-                }
-            }
-        ],
+        "heatmap": False,
+        "disable_heatmap": True,
         "shortcuts": [
             {
                 "label": _("API Configuration"),
                 "doc_view": "List",
                 "type": "DocType",
-                "description": _("Configurar conexión con API externa"),
+                "description": _("Configurar API externa"),
                 "name": "API Configuration"
+            },
+            {
+                "label": _("Analisis Redes Sociales"),
+                "doc_view": "List", 
+                "type": "DocType",
+                "description": _("Gestionar análisis de redes sociales"),
+                "name": "Analisis Redes Sociales"
             },
             {
                 "label": _("Nuevo Análisis"),
                 "doc_view": "New",
-                "type": "DocType", 
-                "description": _("Crear nuevo análisis de redes sociales"),
+                "type": "DocType",
+                "description": _("Crear nuevo análisis"),
                 "name": "Analisis Redes Sociales"
             },
             {
                 "label": _("Dashboard"),
                 "url": "/dashboard",
                 "type": "URL",
-                "description": _("Ver dashboard de analytics")
+                "description": _("Ver dashboard de resultados")
             }
-        ],
-        "cards": [
+        ]
+    }
             {
                 "label": _("Configuración"),
                 "items": [

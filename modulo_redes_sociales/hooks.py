@@ -1,62 +1,29 @@
 app_name = "modulo_redes_sociales"
 app_title = "Modulo Redes Sociales"
 app_publisher = "G7"
-app_description = "Módulo para hacer consultas a un modelo de ML relacionado al número de seguidores de la empresa en redes sociales."
-app_email = "tejedasergio2004@gmail.com"
+app_description = "Módulo para integración con API de Social Media Analytics"
+app_email = "admin@empresa.com"
 app_license = "mit"
+app_version = "1.0.0"
 
-# Incluir archivos CSS y JS
-app_include_css = "/assets/modulo_redes_sociales/css/modulo_redes_sociales.css"
-app_include_js = "/assets/modulo_redes_sociales/js/modulo_redes_sociales.js"
+# Apps requeridas
+required_apps = ["frappe", "erpnext"]
 
-# Logo de la aplicación
-app_logo_url = "/assets/modulo_redes_sociales/images/logo.png"
-
-# Páginas web personalizadas
+# Páginas web
 website_route_rules = [
-    {"from_route": "/dashboard", "to_route": "dashboard"},
-    {"from_route": "/analytics", "to_route": "dashboard"}
+    {"from_route": "/dashboard", "to_route": "dashboard"}
 ]
 
-# Web pages
-web_include_css = "/assets/modulo_redes_sociales/css/dashboard.css"
-web_include_js = "/assets/modulo_redes_sociales/js/dashboard.js"
+# CSS y JS para el módulo
+app_include_css = "/assets/modulo_redes_sociales/css/dashboard.css"
+app_include_js = "/assets/modulo_redes_sociales/js/dashboard.js"
 
-# Apps en la pantalla principal
-add_to_apps_screen = [
-    {
-        "name": "modulo_redes_sociales",
-        "logo": "/assets/modulo_redes_sociales/logo.png",
-        "title": "Social Media Analytics",
-        "route": "/dashboard"
-    }
-]
+# No hacer override de nada existente
+override_whitelisted_methods = {}
+override_doctype_dashboards = {}
 
-# Scheduled Tasks para procesar análisis en background
-scheduler_events = {
-    "cron": {
-        "*/5 * * * *": [
-            "modulo_redes_sociales.modulo_redes_sociales.tasks.process_pending_analysis"
-        ]
-    }
-}
-
-# Fixtures para datos iniciales
-fixtures = [
-    {
-        "doctype": "Custom Field",
-        "filters": [
-            [
-                "name", 
-                "in", 
-                [
-                    "User-social_media_username",
-                    "User-api_access_role"
-                ]
-            ]
-        ]
-    }
-]
+# Fixtures - vacío para evitar problemas
+fixtures = []
 
 # Includes in <head>
 # ------------------
