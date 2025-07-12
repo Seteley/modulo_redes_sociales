@@ -5,33 +5,56 @@ app_description = "Módulo para hacer consultas a un modelo de ML relacionado al
 app_email = "tejedasergio2004@gmail.com"
 app_license = "mit"
 
+# Incluir archivos CSS y JS
 app_include_css = "/assets/modulo_redes_sociales/css/modulo_redes_sociales.css"
 app_include_js = "/assets/modulo_redes_sociales/js/modulo_redes_sociales.js"
 
-# Agregar esta línea
+# Logo de la aplicación
 app_logo_url = "/assets/modulo_redes_sociales/images/logo.png"
 
-# Esto muestra el módulo en el escritorio
-app_include_js = "/assets/modulo_redes_sociales/js/modulo_redes_sociales.js"
-
-# Agrega tu página
+# Páginas web personalizadas
 website_route_rules = [
-    {"from_route": "/", "to_route": "modulo_redes_sociales"}
+    {"from_route": "/dashboard", "to_route": "dashboard"},
+    {"from_route": "/analytics", "to_route": "dashboard"}
 ]
 
-# Apps
-# ------------------
+# Web pages
+web_include_css = "/assets/modulo_redes_sociales/css/dashboard.css"
+web_include_js = "/assets/modulo_redes_sociales/js/dashboard.js"
 
-# required_apps = []
-
-# Each item in the list will be shown as an app in the apps page
+# Apps en la pantalla principal
 add_to_apps_screen = [
     {
         "name": "modulo_redes_sociales",
         "logo": "/assets/modulo_redes_sociales/logo.png",
-        "title": "Modulo Redes Sociales",
-        "route": "/modulo_redes_sociales"
-        # "has_permission": "modulo_redes_sociales.api.permission.has_app_permission"  # Descomenta si tienes esta función
+        "title": "Social Media Analytics",
+        "route": "/dashboard"
+    }
+]
+
+# Scheduled Tasks para procesar análisis en background
+scheduler_events = {
+    "cron": {
+        "*/5 * * * *": [
+            "modulo_redes_sociales.modulo_redes_sociales.tasks.process_pending_analysis"
+        ]
+    }
+}
+
+# Fixtures para datos iniciales
+fixtures = [
+    {
+        "doctype": "Custom Field",
+        "filters": [
+            [
+                "name", 
+                "in", 
+                [
+                    "User-social_media_username",
+                    "User-api_access_role"
+                ]
+            ]
+        ]
     }
 ]
 

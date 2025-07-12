@@ -1,0 +1,258 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-01-15 10:45:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "analisis_section",
+  "titulo",
+  "tipo_analisis",
+  "column_break_4",
+  "estado",
+  "fecha_creacion",
+  "parametros_section",
+  "usuario_red_social",
+  "empresa_id",
+  "column_break_8",
+  "fecha_inicio",
+  "fecha_fin",
+  "prediccion_section",
+  "dias_prediccion",
+  "fecha_prediccion",
+  "column_break_12",
+  "modelo_usado",
+  "confianza",
+  "clustering_section",
+  "likes",
+  "comentarios",
+  "column_break_16",
+  "compartidos",
+  "cluster_resultado",
+  "resultados_section",
+  "prediccion_seguidores",
+  "metricas_modelo",
+  "column_break_20",
+  "cluster_asignado",
+  "cluster_nombre",
+  "logs_section",
+  "log_ejecucion",
+  "error_message"
+ ],
+ "fields": [
+  {
+   "fieldname": "analisis_section",
+   "fieldtype": "Section Break",
+   "label": "Información del Análisis"
+  },
+  {
+   "fieldname": "titulo",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Título del Análisis",
+   "reqd": 1
+  },
+  {
+   "fieldname": "tipo_analisis",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Tipo de Análisis",
+   "options": "Predicción de Seguidores\nClustering\nEntrenamiento de Modelo\nMétricas de Modelo",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Pendiente",
+   "fieldname": "estado",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Estado",
+   "options": "Pendiente\nEjecutando\nCompletado\nError",
+   "read_only": 1
+  },
+  {
+   "default": "Now",
+   "fieldname": "fecha_creacion",
+   "fieldtype": "Datetime",
+   "label": "Fecha de Creación",
+   "read_only": 1
+  },
+  {
+   "fieldname": "parametros_section",
+   "fieldtype": "Section Break",
+   "label": "Parámetros del Análisis"
+  },
+  {
+   "fieldname": "usuario_red_social",
+   "fieldtype": "Data",
+   "label": "Usuario de Red Social",
+   "reqd": 1
+  },
+  {
+   "fieldname": "empresa_id",
+   "fieldtype": "Int",
+   "label": "ID de Empresa"
+  },
+  {
+   "fieldname": "column_break_8",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "fecha_inicio",
+   "fieldtype": "Date",
+   "label": "Fecha de Inicio"
+  },
+  {
+   "fieldname": "fecha_fin",
+   "fieldtype": "Date",
+   "label": "Fecha de Fin"
+  },
+  {
+   "depends_on": "eval:doc.tipo_analisis == 'Predicción de Seguidores'",
+   "fieldname": "prediccion_section",
+   "fieldtype": "Section Break",
+   "label": "Parámetros de Predicción"
+  },
+  {
+   "default": "30",
+   "depends_on": "eval:doc.tipo_analisis == 'Predicción de Seguidores'",
+   "fieldname": "dias_prediccion",
+   "fieldtype": "Int",
+   "label": "Días para Predicción"
+  },
+  {
+   "depends_on": "eval:doc.tipo_analisis == 'Predicción de Seguidores'",
+   "fieldname": "fecha_prediccion",
+   "fieldtype": "Date",
+   "label": "Fecha de Predicción"
+  },
+  {
+   "fieldname": "column_break_12",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "modelo_usado",
+   "fieldtype": "Data",
+   "label": "Modelo Usado",
+   "read_only": 1
+  },
+  {
+   "fieldname": "confianza",
+   "fieldtype": "Float",
+   "label": "Nivel de Confianza",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.tipo_analisis == 'Clustering'",
+   "fieldname": "clustering_section",
+   "fieldtype": "Section Break",
+   "label": "Parámetros de Clustering"
+  },
+  {
+   "depends_on": "eval:doc.tipo_analisis == 'Clustering'",
+   "fieldname": "likes",
+   "fieldtype": "Int",
+   "label": "Número de Likes"
+  },
+  {
+   "depends_on": "eval:doc.tipo_analisis == 'Clustering'",
+   "fieldname": "comentarios",
+   "fieldtype": "Int",
+   "label": "Número de Comentarios"
+  },
+  {
+   "fieldname": "column_break_16",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.tipo_analisis == 'Clustering'",
+   "fieldname": "compartidos",
+   "fieldtype": "Int",
+   "label": "Número de Compartidos"
+  },
+  {
+   "fieldname": "cluster_resultado",
+   "fieldtype": "Int",
+   "label": "Cluster Resultado",
+   "read_only": 1
+  },
+  {
+   "fieldname": "resultados_section",
+   "fieldtype": "Section Break",
+   "label": "Resultados del Análisis"
+  },
+  {
+   "fieldname": "prediccion_seguidores",
+   "fieldtype": "Int",
+   "label": "Predicción de Seguidores",
+   "read_only": 1
+  },
+  {
+   "fieldname": "metricas_modelo",
+   "fieldtype": "Long Text",
+   "label": "Métricas del Modelo",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_20",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "cluster_asignado",
+   "fieldtype": "Int",
+   "label": "Cluster Asignado",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cluster_nombre",
+   "fieldtype": "Data",
+   "label": "Nombre del Cluster",
+   "read_only": 1
+  },
+  {
+   "fieldname": "logs_section",
+   "fieldtype": "Section Break",
+   "label": "Logs de Ejecución"
+  },
+  {
+   "fieldname": "log_ejecucion",
+   "fieldtype": "Long Text",
+   "label": "Log de Ejecución",
+   "read_only": 1
+  },
+  {
+   "fieldname": "error_message",
+   "fieldtype": "Long Text",
+   "label": "Mensaje de Error",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2024-01-15 10:45:00.000000",
+ "modified_by": "Administrator",
+ "module": "Modulo Redes Sociales",
+ "name": "Analisis Redes Sociales",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

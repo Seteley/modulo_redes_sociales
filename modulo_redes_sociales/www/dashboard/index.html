@@ -1,0 +1,391 @@
+{% extends "templates/web.html" %}
+
+{% block title %}Dashboard de Redes Sociales{% endblock %}
+
+{% block page_content %}
+<div class="container mt-4">
+    <!-- Navegación rápida -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/app">ERPNext</a></li>
+                    <li class="breadcrumb-item active">Social Media Analytics</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Título y acciones rápidas -->
+    <div class="row">
+        <div class="col-md-8">
+            <h1>🚀 Dashboard de Social Media Analytics</h1>
+            <p class="lead">Análisis predictivo y clustering de redes sociales</p>
+        </div>
+        <div class="col-md-4 text-right">
+            <div class="btn-group-vertical" role="group">
+                <a href="/app/api-configuration" class="btn btn-outline-primary btn-sm mb-2">
+                    🔧 Configurar API
+                </a>
+                <a href="/app/analisis-redes-sociales/new" class="btn btn-success btn-sm mb-2">
+                    ➕ Nuevo Análisis
+                </a>
+                <a href="/app/analisis-redes-sociales" class="btn btn-outline-info btn-sm">
+                    📊 Ver Historial
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Accesos rápidos en tarjetas -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card border-danger">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="fa fa-cog fa-3x text-danger"></i>
+                    </div>
+                    <h5 class="card-title">Configurar API</h5>
+                    <p class="card-text">Configurar conexión con la API externa</p>
+                    <a href="/app/api-configuration" class="btn btn-danger btn-sm">Configurar</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-success">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="fa fa-plus-circle fa-3x text-success"></i>
+                    </div>
+                    <h5 class="card-title">Nuevo Análisis</h5>
+                    <p class="card-text">Crear análisis de predicción o clustering</p>
+                    <a href="/app/analisis-redes-sociales/new" class="btn btn-success btn-sm">Crear</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-info">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="fa fa-list fa-3x text-info"></i>
+                    </div>
+                    <h5 class="card-title">Mis Análisis</h5>
+                    <p class="card-text">Ver historial y resultados</p>
+                    <a href="/app/analisis-redes-sociales" class="btn btn-info btn-sm">Ver Lista</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-warning">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="fa fa-book fa-3x text-warning"></i>
+                    </div>
+                    <h5 class="card-title">Documentación</h5>
+                    <p class="card-text">Guía de uso y API</p>
+                    <a href="http://172.25.128.1:8000/docs" target="_blank" class="btn btn-warning btn-sm">Ver Docs</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Estado de la API -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>🔗 Estado de la API</h5>
+                </div>
+                <div class="card-body">
+                    {% if api_config %}
+                        <div class="d-flex align-items-center">
+                            <span class="badge badge-{{ 'success' if api_config.connection_status == 'Exitoso' else 'warning' }} me-2">
+                                {{ api_config.connection_status or 'No probado' }}
+                            </span>
+                            <strong>{{ api_config.api_name }}</strong>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-warning">
+                            ⚠️ No hay configuración de API habilitada. 
+                            <a href="/app/api-configuration" class="btn btn-sm btn-primary ms-2">Configurar API</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Estadísticas -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="text-primary">{{ stats.total_analisis }}</h3>
+                    <p>Total de Análisis</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="text-success">{{ stats.analisis_completados }}</h3>
+                    <p>Completados</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="text-danger">{{ stats.analisis_error }}</h3>
+                    <p>Con Error</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="text-warning">{{ stats.analisis_pendientes }}</h3>
+                    <p>Pendientes</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Acciones Rápidas -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>⚡ Acciones Rápidas</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-2">
+                            <button class="btn btn-primary btn-block" onclick="crearAnalisisRapido('Predicción de Seguidores')">
+                                📈 Predicción de Seguidores
+                            </button>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <button class="btn btn-info btn-block" onclick="crearAnalisisRapido('Clustering')">
+                                🎯 Clustering
+                            </button>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <button class="btn btn-success btn-block" onclick="crearAnalisisRapido('Entrenamiento de Modelo')">
+                                🤖 Entrenar Modelo
+                            </button>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <button class="btn btn-secondary btn-block" onclick="crearAnalisisRapido('Métricas de Modelo')">
+                                📊 Ver Métricas
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Análisis Recientes -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5>📋 Análisis Recientes</h5>
+                    <a href="/app/analisis-redes-sociales" class="btn btn-outline-primary btn-sm">Ver Todos</a>
+                </div>
+                <div class="card-body">
+                    {% if analisis_recientes %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Título</th>
+                                        <th>Tipo</th>
+                                        <th>Usuario</th>
+                                        <th>Estado</th>
+                                        <th>Fecha</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for analisis in analisis_recientes %}
+                                    <tr>
+                                        <td>{{ analisis.titulo }}</td>
+                                        <td>
+                                            <span class="badge badge-outline-secondary">{{ analisis.tipo_analisis }}</span>
+                                        </td>
+                                        <td>{{ analisis.usuario_red_social }}</td>
+                                        <td>
+                                            <span class="badge badge-{{ 'success' if analisis.estado == 'Completado' else 'danger' if analisis.estado == 'Error' else 'warning' }}">
+                                                {{ analisis.estado }}
+                                            </span>
+                                        </td>
+                                        <td>{{ frappe.format(analisis.fecha_creacion, 'datetime') }}</td>
+                                        <td>
+                                            <a href="/app/analisis-redes-sociales/{{ analisis.name }}" class="btn btn-sm btn-outline-primary">Ver</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <p class="text-muted">No hay análisis registrados</p>
+                            <button class="btn btn-primary" onclick="window.location.href='/app/analisis-redes-sociales/new'">
+                                Crear Primer Análisis
+                            </button>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Análisis Rápido -->
+<div class="modal fade" id="modalAnalisisRapido" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Crear Análisis Rápido</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formAnalisisRapido">
+                    <div class="mb-3">
+                        <label class="form-label">Tipo de Análisis</label>
+                        <input type="text" class="form-control" id="tipoAnalisis" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Usuario de Red Social</label>
+                        <input type="text" class="form-control" id="usuarioRedSocial" placeholder="Ej: Interbank" required>
+                    </div>
+                    <div id="parametrosEspecificos"></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="ejecutarAnalisisRapido()">Crear y Ejecutar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function crearAnalisisRapido(tipo) {
+    document.getElementById('tipoAnalisis').value = tipo;
+    document.getElementById('usuarioRedSocial').value = '';
+    
+    // Limpiar parámetros específicos
+    const parametrosDiv = document.getElementById('parametrosEspecificos');
+    parametrosDiv.innerHTML = '';
+    
+    // Agregar campos específicos según el tipo
+    if (tipo === 'Predicción de Seguidores') {
+        parametrosDiv.innerHTML = `
+            <div class="mb-3">
+                <label class="form-label">Días para Predicción</label>
+                <input type="number" class="form-control" id="diasPrediccion" value="30">
+            </div>
+        `;
+    } else if (tipo === 'Clustering') {
+        parametrosDiv.innerHTML = `
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="form-label">Likes</label>
+                    <input type="number" class="form-control" id="likes" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Comentarios</label>
+                    <input type="number" class="form-control" id="comentarios" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Compartidos</label>
+                    <input type="number" class="form-control" id="compartidos" required>
+                </div>
+            </div>
+        `;
+    }
+    
+    // Mostrar modal
+    new bootstrap.Modal(document.getElementById('modalAnalisisRapido')).show();
+}
+
+function ejecutarAnalisisRapido() {
+    const tipo = document.getElementById('tipoAnalisis').value;
+    const usuario = document.getElementById('usuarioRedSocial').value;
+    
+    if (!usuario) {
+        alert('Por favor ingrese el usuario de red social');
+        return;
+    }
+    
+    const parametros = {
+        tipo_analisis: tipo,
+        usuario_red_social: usuario
+    };
+    
+    // Agregar parámetros específicos
+    if (tipo === 'Predicción de Seguidores') {
+        parametros.dias_prediccion = document.getElementById('diasPrediccion').value;
+    } else if (tipo === 'Clustering') {
+        parametros.likes = document.getElementById('likes').value;
+        parametros.comentarios = document.getElementById('comentarios').value;
+        parametros.compartidos = document.getElementById('compartidos').value;
+    }
+    
+    // Llamar a la API de Frappe
+    frappe.call({
+        method: 'modulo_redes_sociales.modulo_redes_sociales.doctype.analisis_redes_sociales.analisis_redes_sociales.crear_analisis_rapido',
+        args: parametros,
+        callback: function(r) {
+            if (r.message) {
+                // Cerrar modal
+                bootstrap.Modal.getInstance(document.getElementById('modalAnalisisRapido')).hide();
+                
+                // Mostrar mensaje de éxito
+                frappe.show_alert({
+                    message: 'Análisis creado y en ejecución',
+                    indicator: 'green'
+                });
+                
+                // Recargar página después de un momento
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+            }
+        },
+        error: function(r) {
+            frappe.show_alert({
+                message: 'Error al crear análisis: ' + r.message,
+                indicator: 'red'
+            });
+        }
+    });
+}
+
+// Auto-refresh cada 30 segundos
+setInterval(() => {
+    window.location.reload();
+}, 30000);
+</script>
+
+<style>
+.card {
+    border: 1px solid #e9ecef;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.badge-outline-secondary {
+    color: #6c757d;
+    border: 1px solid #6c757d;
+    background-color: transparent;
+}
+
+.btn-block {
+    width: 100%;
+}
+</style>
+{% endblock %}
